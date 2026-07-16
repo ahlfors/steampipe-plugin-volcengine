@@ -122,7 +122,7 @@ func listVpcSubnets(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateD
 	}
 
 	input := &vpc.DescribeSubnetsInput{
-		MaxResults: volcengine.Int32(100),
+		MaxResults: volcengine.Int64(100),
 	}
 
 	if value, ok := GetStringQualValue(d.Quals, "subnet_id"); ok && value != nil {

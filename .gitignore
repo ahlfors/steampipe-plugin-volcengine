@@ -5,4 +5,4 @@
 /mocks
 /vendor
 .DS_Store
-
+steampipe-plugin-volcengine

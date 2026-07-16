@@ -119,7 +119,7 @@ func listVpcs(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (
 	}
 
 	input := &vpc.DescribeVpcsInput{
-		MaxResults: volcengine.Int32(100),
+		MaxResults: volcengine.Int64(100),
 	}
 
 	if value, ok := GetStringQualValue(d.Quals, "vpc_id"); ok && value != nil {

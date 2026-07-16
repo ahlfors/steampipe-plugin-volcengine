@@ -29,56 +29,61 @@ func tableVolcengineIamUser(ctx context.Context) *plugin.Table {
 				Name:        "user_name",
 				Type:        proto.ColumnType_STRING,
 				Description: "The name of the IAM user.",
+				Transform:   transform.FromField("UserName"),
 			},
 			{
 				Name:        "user_id",
-				Type:        proto.ColumnType_STRING,
+				Type:        proto.ColumnType_INT,
 				Description: "The ID of the IAM user.",
+				Transform:   transform.FromField("Id"),
 			},
 			{
 				Name:        "arn",
 				Type:        proto.ColumnType_STRING,
 				Description: "The ARN of the IAM user.",
+				Transform:   transform.FromField("Trn"),
 			},
 			{
 				Name:        "display_name",
 				Type:        proto.ColumnType_STRING,
 				Description: "The display name of the user.",
+				Transform:   transform.FromField("DisplayName"),
 			},
 			{
 				Name:        "email",
 				Type:        proto.ColumnType_STRING,
 				Description: "The email address of the user.",
+				Transform:   transform.FromField("Email"),
 			},
 			{
 				Name:        "mobile_phone",
 				Type:        proto.ColumnType_STRING,
 				Description: "The mobile phone number of the user.",
+				Transform:   transform.FromField("MobilePhone"),
 			},
 			{
 				Name:        "description",
 				Type:        proto.ColumnType_STRING,
 				Description: "The description of the user.",
+				Transform:   transform.FromField("Description"),
 			},
 			{
 				Name:        "create_date",
-				Type:        proto.ColumnType_TIMESTAMP,
+				Type:        proto.ColumnType_STRING,
 				Description: "The time when the user was created.",
+				Transform:   transform.FromField("CreateDate"),
 			},
 			{
 				Name:        "update_date",
-				Type:        proto.ColumnType_TIMESTAMP,
+				Type:        proto.ColumnType_STRING,
 				Description: "The time when the user was last updated.",
-			},
-			{
-				Name:        "active",
-				Type:        proto.ColumnType_BOOL,
-				Description: "Whether the user is active.",
+				Transform:   transform.FromField("UpdateDate"),
 			},
 			{
 				Name:        "account_id",
 				Type:        proto.ColumnType_STRING,
 				Description: "The account ID to which the user belongs.",
+				Transform:   transform.FromField("AccountId").Transform(int64PtrToString),
 			},
 			// Steampipe standard columns
 			{
@@ -91,7 +96,7 @@ func tableVolcengineIamUser(ctx context.Context) *plugin.Table {
 				Name:        "akas",
 				Description: ColumnDescriptionAkas,
 				Type:        proto.ColumnType_JSON,
-				Transform:   transform.FromField("Arn").Transform(ensureStringArray),
+				Transform:   transform.FromField("Trn").Transform(ensureStringArray),
 			},
 		},
 	}
@@ -105,34 +110,42 @@ func listIamUsers(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateDat
 	}
 
 	input := &iam.ListUsersInput{}
+	limit := int32(100)
+	input.Limit = &limit
 
 	if value, ok := GetStringQualValue(d.Quals, "user_name"); ok && value != nil {
-		input.UserName = value
+		input.Query = value
 	}
 
+	offset := int32(0)
 	for {
 		d.WaitForListRateLimit(ctx)
+		input.Offset = &offset
 		response, err := client.ListUsers(input)
 		if err != nil {
 			plugin.Logger(ctx).Error("volcengine_iam_user.listIamUsers", "query_error", err)
 			return nil, err
 		}
 
-		if response.Users == nil {
+		if response.UserMetadata == nil {
 			break
 		}
 
-		for _, user := range response.Users {
+		for _, user := range response.UserMetadata {
 			d.StreamListItem(ctx, user)
 			if d.RowsRemaining(ctx) == 0 {
 				return nil, nil
 			}
 		}
 
-		if response.Marker == nil || *response.Marker == "" {
+		if len(response.UserMetadata) == 0 {
 			break
 		}
-		input.Marker = response.Marker
+
+		offset += int32(len(response.UserMetadata))
+		if response.Total != nil && offset >= *response.Total {
+			break
+		}
 	}
 
 	return nil, nil
@@ -147,8 +160,10 @@ func getIamUser(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 
 	var userName string
 	if h.Item != nil {
-		user := h.Item.(*iam.User)
-		userName = *user.UserName
+		user := h.Item.(*iam.UserMetadatumForListUsersOutput)
+		if user.UserName != nil {
+			userName = *user.UserName
+		}
 	} else {
 		userName = d.EqualsQuals["user_name"].GetStringValue()
 	}

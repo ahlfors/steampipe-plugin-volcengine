@@ -30,6 +30,21 @@ func ensureStringArray(_ context.Context, d *transform.TransformData) (interface
 	}
 }
 
+// int64PtrToString converts an int64 pointer to a string pointer
+func int64PtrToString(_ context.Context, d *transform.TransformData) (interface{}, error) {
+	switch v := d.Value.(type) {
+	case *int64:
+		if v == nil {
+			return nil, nil
+		}
+		return fmt.Sprintf("%d", *v), nil
+	case int64:
+		return fmt.Sprintf("%d", v), nil
+	default:
+		return fmt.Sprintf("%v", d.Value), nil
+	}
+}
+
 // GetStringQualValue gets an equal qualifier value as string
 func GetStringQualValue(quals plugin.KeyColumnQualMap, columnName string) (value *string, exists bool) {
 	if quals[columnName] == nil {

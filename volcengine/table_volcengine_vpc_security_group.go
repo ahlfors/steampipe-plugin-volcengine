@@ -119,7 +119,7 @@ func listVpcSecurityGroups(ctx context.Context, d *plugin.QueryData, _ *plugin.H
 	}
 
 	input := &vpc.DescribeSecurityGroupsInput{
-		MaxResults: volcengine.Int32(100),
+		MaxResults: volcengine.Int64(100),
 	}
 
 	if value, ok := GetStringQualValue(d.Quals, "security_group_id"); ok && value != nil {
@@ -129,7 +129,7 @@ func listVpcSecurityGroups(ctx context.Context, d *plugin.QueryData, _ *plugin.H
 		input.VpcId = value
 	}
 	if value, ok := GetStringQualValue(d.Quals, "security_group_name"); ok && value != nil {
-		input.SecurityGroupName = value
+		input.SecurityGroupNames = append(input.SecurityGroupNames, value)
 	}
 
 	for {
