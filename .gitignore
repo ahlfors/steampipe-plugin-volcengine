@@ -1,0 +1,8 @@
+# Default ignored files
+.idea
+/dist
+/releases
+/mocks
+/vendor
+.DS_Store
+
