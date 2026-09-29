@@ -5,9 +5,9 @@ go 1.24
 toolchain go1.24.1
 
 require (
-	github.com/turbot/steampipe-plugin-sdk/v5 v5.13.1
-	github.com/volcengine/ve-tos-golang-sdk/v2 v2.7.3
-	github.com/volcengine/volcengine-go-sdk v1.0.136
+	github.com/turbot/steampipe-plugin-sdk/v6 v6.1.0
+	github.com/volcengine/ve-tos-golang-sdk/v2 v2.9.10
+	github.com/volcengine/volcengine-go-sdk v1.2.54
 )
 
 require (
