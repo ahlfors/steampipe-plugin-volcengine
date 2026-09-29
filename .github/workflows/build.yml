@@ -1,0 +1,38 @@
+name: Build Steampipe Plugin
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Build plugin
+        run: make build
+
+      - name: Verify
+        run: |
+          file steampipe-plugin-volcengine
+          ls -lh steampipe-plugin-volcengine
+
+      - name: Upload plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: steampipe-plugin-volcengine
+          path: steampipe-plugin-volcengine
