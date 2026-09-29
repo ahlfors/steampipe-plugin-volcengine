@@ -87,6 +87,7 @@ func tableVolcengineEcsInstance(ctx context.Context) *plugin.Table {
 				Name:        "cpu",
 				Description: "The number of vCPUs.",
 				Type:        proto.ColumnType_INT,
+				Transform: transform.FromField("Cpus"),
 			},
 			{
 				Name:        "memory_size",
