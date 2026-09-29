@@ -160,7 +160,7 @@ func getIamUser(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 
 	var userName string
 	if h.Item != nil {
-		user := h.Item.(*iam.UserMetadatumForListUsersOutput)
+		user := h.Item.(*iam.UserMetadataForListUsersOutput)
 		if user.UserName != nil {
 			userName = *user.UserName
 		}

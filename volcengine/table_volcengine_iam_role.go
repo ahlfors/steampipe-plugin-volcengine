@@ -146,7 +146,7 @@ func getIamRole(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData)
 
 	var roleName string
 	if h.Item != nil {
-		role := h.Item.(*iam.RoleMetadatumForListRolesOutput)
+		role := h.Item.(*iam.RoleMetadataForListRolesOutput)
 		if role.RoleName != nil {
 			roleName = *role.RoleName
 		}

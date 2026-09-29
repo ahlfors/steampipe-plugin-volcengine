@@ -18,9 +18,9 @@ func ConfigInstance() interface{} {
 
 // GetConfig retrieves and casts connection config from query data.
 func GetConfig(connection *plugin.Connection) volcengineConfig {
-	if connection == nil || connection.Config == nil {
+	if connection == nil {
 		return volcengineConfig{}
 	}
-	config, _ := connection.Config.(volcengineConfig)
+	config, _ := connection.GetConfig().(volcengineConfig)
 	return config
 }

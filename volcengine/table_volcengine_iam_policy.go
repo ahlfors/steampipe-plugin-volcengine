@@ -152,7 +152,7 @@ func getIamPolicy(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateDat
 	var policyName string
 	var policyType string
 	if h.Item != nil {
-		policy := h.Item.(*iam.PolicyMetadatumForListPoliciesOutput)
+		policy := h.Item.(*iam.PolicyMetadataForListPoliciesOutput)
 		if policy.PolicyName != nil {
 			policyName = *policy.PolicyName
 		}
