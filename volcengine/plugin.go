@@ -3,8 +3,8 @@ package volcengine
 import (
 	"context"
 
-	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
-	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
+	"github.com/turbot/steampipe-plugin-sdk/v6/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v6/plugin/transform"
 )
 
 // Plugin creates this (volcengine) plugin.
@@ -32,12 +32,12 @@ func Plugin(ctx context.Context) *plugin.Plugin {
 		TableMap: map[string]*plugin.Table{
 			// Compute
 			"volcengine_ecs_instance": tableVolcengineEcsInstance(ctx),
-			"volcengine_ebs_volume":     tableVolcengineEbsVolume(ctx),
+			"volcengine_ebs_volume":   tableVolcengineEbsVolume(ctx),
 			// Networking
-			"volcengine_vpc":              tableVolcengineVpc(ctx),
-			"volcengine_vpc_subnet":       tableVolcengineVpcSubnet(ctx),
+			"volcengine_vpc":                tableVolcengineVpc(ctx),
+			"volcengine_vpc_subnet":         tableVolcengineVpcSubnet(ctx),
 			"volcengine_vpc_security_group": tableVolcengineVpcSecurityGroup(ctx),
-			"volcengine_eip":              tableVolcengineEip(ctx),
+			"volcengine_eip":                tableVolcengineEip(ctx),
 			// Load Balancers
 			"volcengine_clb": tableVolcengineClb(ctx),
 			"volcengine_alb": tableVolcengineAlb(ctx),

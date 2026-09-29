@@ -1,6 +1,6 @@
 package volcengine
 
-import "github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+import "github.com/turbot/steampipe-plugin-sdk/v6/plugin"
 
 // volcengineConfig holds the connection configuration for Volcengine.
 type volcengineConfig struct {

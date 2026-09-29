@@ -4,8 +4,8 @@ import (
 	"context"
 	"strconv"
 
-	"github.com/turbot/steampipe-plugin-sdk/v5/memoize"
-	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"
+	"github.com/turbot/steampipe-plugin-sdk/v6/memoize"
+	"github.com/turbot/steampipe-plugin-sdk/v6/plugin"
 	"github.com/volcengine/volcengine-go-sdk/service/iam"
 )
 
